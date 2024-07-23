@@ -6,14 +6,7 @@
         <span>{{ movie.year }}</span>
       </div>
       <div class="row no-wrap items-center">
-        <q-rating
-          size="18px"
-          v-model="stars"
-          :max="5"
-          color="primary"
-          readonly
-        />
-        <span class="text-caption text-grey q-ml-sm">{{ movie.rating }}</span>
+        <span class="text-caption text-grey">Rating: {{ movie.rating }}</span>
       </div>
     </q-card-section>
 
@@ -22,12 +15,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
 import { IMovie } from 'src/types';
 
-const props = defineProps<{ movie: IMovie }>();
-
-const stars = ref(props.movie.rating);
+defineProps<{ movie: IMovie }>();
 </script>
 
 <style scoped>

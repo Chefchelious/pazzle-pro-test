@@ -1,186 +1,46 @@
 <template>
   <div class="movies-container">
-    <div class="row items-center justify-between q-mb-lg">
-      <h1 class="text-h4">Movies list here</h1>
+    <div class="row items-center justify-between q-mb-lg gap-md">
+      <h1 class="text-h4 text-sm-text-subtitle1">Movies list here</h1>
       <q-btn color="purple-6" label="add new" />
     </div>
 
-    <div class="movie-list q-mb-md">
-      <movie-item
-        v-for="movie in paginatedMovies"
-        :key="movie.id"
-        :movie="movie"
-      />
+    <div v-if="movies.length">
+      <div class="movie-list q-mb-md">
+        <movie-item
+          v-for="movie in paginatedMovies"
+          :key="movie.id"
+          :movie="movie"
+        />
+      </div>
+
+      <div class="row justify-center" v-show="movies.length">
+        <q-pagination
+          v-model="pagination.page"
+          :max="pagesNumber"
+          :max-pages="7"
+          direction-links
+        />
+      </div>
     </div>
 
-    <div class="row justify-center">
-      <q-pagination
-        v-model="pagination.page"
-        :max="pagesNumber"
-        :max-pages="7"
-        direction-links
-      />
-    </div>
+    <h4 v-else>здесь пусто :(</h4>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import MovieImage from 'assets/movie-image.jpeg';
 import MovieItem from 'src/components/movie/movie-item.vue';
-import { IMovie } from 'src/types';
+import { useMovieStore } from 'src/stores/movie-store';
+import { storeToRefs } from 'pinia';
 
 const pagination = ref({
   page: 1,
   rowsPerPage: 10,
 });
 
-const movies = ref<IMovie[]>([
-  {
-    id: '123',
-    description: 'asdasddsa',
-    genre: {
-      id: '43',
-      name: 'Anime',
-    },
-    image: MovieImage,
-    rating: 3,
-    title: 'aidsji ji',
-    year: '2025',
-  },
-  {
-    id: '123',
-    description: 'asdasddsa',
-    genre: {
-      id: '43',
-      name: 'Anime',
-    },
-    image: MovieImage,
-    rating: 3,
-    title: 'aidsji ji',
-    year: '2025',
-  },
-  {
-    id: '123',
-    description: 'asdasddsa',
-    genre: {
-      id: '43',
-      name: 'Anime',
-    },
-    image: MovieImage,
-    rating: 3,
-    title: 'aidsji ji',
-    year: '2025',
-  },
-  {
-    id: '123',
-    description: 'asdasddsa',
-    genre: {
-      id: '43',
-      name: 'Anime',
-    },
-    image: MovieImage,
-    rating: 3,
-    title: 'aidsji ji',
-    year: '2025',
-  },
-  {
-    id: '123',
-    description: 'asdasddsa',
-    genre: {
-      id: '43',
-      name: 'Anime',
-    },
-    image: MovieImage,
-    rating: 3,
-    title: 'aidsji ji',
-    year: '2025',
-  },
-  {
-    id: '123',
-    description: 'asdasddsa',
-    genre: {
-      id: '43',
-      name: 'Anime',
-    },
-    image: MovieImage,
-    rating: 3,
-    title: 'aidsji ji',
-    year: '2025',
-  },
-  {
-    id: '123',
-    description: 'asdasddsa',
-    genre: {
-      id: '43',
-      name: 'Anime',
-    },
-    image: MovieImage,
-    rating: 3,
-    title: 'aidsji ji',
-    year: '2025',
-  },
-  {
-    id: '123',
-    description: 'asdasddsa',
-    genre: {
-      id: '43',
-      name: 'Anime',
-    },
-    image: MovieImage,
-    rating: 3,
-    title: 'aidsji ji',
-    year: '2025',
-  },
-  {
-    id: '123',
-    description: 'asdasddsa',
-    genre: {
-      id: '43',
-      name: 'Anime',
-    },
-    image: MovieImage,
-    rating: 3,
-    title: 'aidsji ji',
-    year: '2025',
-  },
-  {
-    id: '123',
-    description: 'asdasddsa',
-    genre: {
-      id: '43',
-      name: 'Anime',
-    },
-    image: MovieImage,
-    rating: 3,
-    title: 'aidsji ji',
-    year: '2025',
-  },
-  {
-    id: '123',
-    description: 'asdasddsa',
-    genre: {
-      id: '43',
-      name: 'Anime',
-    },
-    image: MovieImage,
-    rating: 3,
-    title: 'aidsji ji',
-    year: '2025',
-  },
-  {
-    id: '123',
-    description: 'asdasddsa',
-    genre: {
-      id: '43',
-      name: 'Anime',
-    },
-    image: MovieImage,
-    rating: 3,
-    title: 'aidsji ji',
-    year: '2026',
-  },
-]);
+const movieStore = useMovieStore();
+const { movies } = storeToRefs(movieStore);
 
 const paginatedMovies = computed(() => {
   const start = (pagination.value.page - 1) * pagination.value.rowsPerPage;

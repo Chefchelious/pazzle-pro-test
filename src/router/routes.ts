@@ -11,6 +11,14 @@ const routes: RouteRecordRaw[] = [
         component: () => import('pages/modules/movies/index.vue'),
       },
       {
+        path: '/movie/create',
+        component: () => import('pages/modules/movies/create-movie.vue'),
+      },
+      {
+        path: '/movie/edit/:id?',
+        component: () => import('pages/modules/movies/edit-movie.vue'),
+      },
+      {
         path: '/album',
         component: () => import('pages/modules/album/index.vue'),
       },

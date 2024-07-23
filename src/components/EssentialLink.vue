@@ -40,10 +40,9 @@ const globalProperties =
 
 const checkIsActiveRoute = (link: string) => {
   if (link === '' && globalProperties?.$route.fullPath === '/') {
-    console.log('yes');
     return true;
   }
 
-  return link && globalProperties?.$route.fullPath.includes(link);
+  return link === globalProperties?.$route.path;
 };
 </script>
