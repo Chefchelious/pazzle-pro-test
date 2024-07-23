@@ -1,18 +1,39 @@
 <template>
   <div class="movies-container">
-    <h1 class="text-h4 q-mb-lg">Movies list here</h1>
+    <div class="row items-center justify-between q-mb-lg">
+      <h1 class="text-h4">Movies list here</h1>
+      <q-btn color="purple-6" label="add new" />
+    </div>
 
-    <div class="movie-list">
-      <movie-item v-for="movie in movies" :key="movie.id" :movie="movie" />
+    <div class="movie-list q-mb-md">
+      <movie-item
+        v-for="movie in paginatedMovies"
+        :key="movie.id"
+        :movie="movie"
+      />
+    </div>
+
+    <div class="row justify-center">
+      <q-pagination
+        v-model="pagination.page"
+        :max="pagesNumber"
+        :max-pages="7"
+        direction-links
+      />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import MovieImage from 'assets/movie-image.jpeg';
 import MovieItem from 'src/components/movie/movie-item.vue';
 import { IMovie } from 'src/types';
+
+const pagination = ref({
+  page: 1,
+  rowsPerPage: 10,
+});
 
 const movies = ref<IMovie[]>([
   {
@@ -87,7 +108,89 @@ const movies = ref<IMovie[]>([
     title: 'aidsji ji',
     year: '2025',
   },
+  {
+    id: '123',
+    description: 'asdasddsa',
+    genre: {
+      id: '43',
+      name: 'Anime',
+    },
+    image: MovieImage,
+    rating: 3,
+    title: 'aidsji ji',
+    year: '2025',
+  },
+  {
+    id: '123',
+    description: 'asdasddsa',
+    genre: {
+      id: '43',
+      name: 'Anime',
+    },
+    image: MovieImage,
+    rating: 3,
+    title: 'aidsji ji',
+    year: '2025',
+  },
+  {
+    id: '123',
+    description: 'asdasddsa',
+    genre: {
+      id: '43',
+      name: 'Anime',
+    },
+    image: MovieImage,
+    rating: 3,
+    title: 'aidsji ji',
+    year: '2025',
+  },
+  {
+    id: '123',
+    description: 'asdasddsa',
+    genre: {
+      id: '43',
+      name: 'Anime',
+    },
+    image: MovieImage,
+    rating: 3,
+    title: 'aidsji ji',
+    year: '2025',
+  },
+  {
+    id: '123',
+    description: 'asdasddsa',
+    genre: {
+      id: '43',
+      name: 'Anime',
+    },
+    image: MovieImage,
+    rating: 3,
+    title: 'aidsji ji',
+    year: '2025',
+  },
+  {
+    id: '123',
+    description: 'asdasddsa',
+    genre: {
+      id: '43',
+      name: 'Anime',
+    },
+    image: MovieImage,
+    rating: 3,
+    title: 'aidsji ji',
+    year: '2026',
+  },
 ]);
+
+const paginatedMovies = computed(() => {
+  const start = (pagination.value.page - 1) * pagination.value.rowsPerPage;
+  const end = start + pagination.value.rowsPerPage;
+  return movies.value.slice(start, end);
+});
+
+const pagesNumber = computed(() => {
+  return Math.ceil(movies.value.length / pagination.value.rowsPerPage);
+});
 </script>
 
 <style scoped lang="scss">
