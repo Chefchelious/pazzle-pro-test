@@ -2,7 +2,7 @@
   <div class="movies-container">
     <div class="row items-center justify-between q-mb-lg gap-md">
       <h1 class="text-h4 text-sm-text-subtitle1">Movies list here</h1>
-      <q-btn color="purple-6" label="add new" />
+      <q-btn color="purple-6" label="add new" @click="goToCreatePage" />
     </div>
 
     <div v-if="movies.length">
@@ -29,10 +29,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, getCurrentInstance } from 'vue';
 import MovieItem from 'src/components/movie/movie-item.vue';
 import { useMovieStore } from 'src/stores/movie-store';
 import { storeToRefs } from 'pinia';
+
+const globalProperties =
+  getCurrentInstance()?.appContext.config.globalProperties;
 
 const pagination = ref({
   page: 1,
@@ -51,6 +54,8 @@ const paginatedMovies = computed(() => {
 const pagesNumber = computed(() => {
   return Math.ceil(movies.value.length / pagination.value.rowsPerPage);
 });
+
+const goToCreatePage = () => globalProperties?.$router.push('/movie/create');
 </script>
 
 <style scoped lang="scss">

@@ -61,7 +61,7 @@
       <q-input
         v-model="formData.rating"
         label="Rating"
-        :rules="[(val: string) => val ? !!val.trim() && +val < 1 && +val > 10 : 'Rating must be a value 1-10']"
+        :rules="ratingRules"
         color="white"
         mask="##"
         dark
@@ -87,6 +87,33 @@
       />
     </div>
 
+    <div>
+      <q-file
+        filled
+        bottom-slots
+        v-model="file"
+        label="Label"
+        dark
+        counter
+        :rules="fileRules"
+      >
+        <template v-slot:prepend>
+          <q-icon name="cloud_upload" @click.stop.prevent />
+        </template>
+        <template v-slot:append>
+          <q-icon
+            name="close"
+            @click.stop.prevent="file = null"
+            class="cursor-pointer"
+          />
+        </template>
+      </q-file>
+    </div>
+
+    <div v-if="formData.image">
+      <img :src="formData.image" alt="Movie Image" style="max-width: 100%" />
+    </div>
+
     <div style="max-height: 150px" class="q-pb-lg">
       <q-input
         v-model="formData.description"
@@ -110,17 +137,22 @@
 </template>
 
 <script setup lang="ts">
-import { getCurrentInstance } from 'vue';
+import { getCurrentInstance, watch } from 'vue';
 import { GENRES } from 'src/mokData';
 import { IGenre } from 'src/types';
 import { reactive, ref } from 'vue';
+import { useMovieStore } from 'src/stores/movie-store';
+import { v4 as uuidv4 } from 'uuid';
 
 const globalProperties =
   getCurrentInstance()?.appContext.config.globalProperties;
 
+const movieStore = useMovieStore();
+
 const isDatePickerVisible = ref(false);
 const dpKey = ref(Date.now());
 const form = ref();
+const file = ref<File | null>(null);
 
 const movieId = ref<string>(globalProperties?.$route.params.id as string);
 
@@ -130,7 +162,19 @@ const formData = reactive({
   rating: '',
   description: '',
   genre: null as null | IGenre,
+  image: '',
 });
+
+watch(
+  () => file.value,
+  (newFile) => {
+    if (newFile) {
+      convertFileToBase64(newFile);
+    } else {
+      formData.image = '';
+    }
+  }
+);
 
 const onUpdateMv = () => {
   dpKey.value = Date.now();
@@ -148,16 +192,60 @@ const findNavigationButtons = () => {
   });
 };
 
+const create = () => {
+  console.log(movieStore.movies.length);
+  movieStore.addnewMovie({
+    id: uuidv4(),
+    ...formData,
+    rating: +formData.rating,
+    genre: formData.genre as IGenre,
+  });
+
+  console.log(movieStore.movies.length);
+
+  globalProperties?.$router.go(-1);
+};
+
+const update = () => {
+  console.log('updated');
+};
+
 const save = async () => {
   try {
     const is_valid = await form.value.validate();
     if (!is_valid) {
       return;
     }
+
+    if (movieId.value) {
+      update();
+    } else {
+      create();
+    }
   } catch (e: unknown) {
     console.error('save', e);
   }
 };
+
+const ratingRules = [
+  (val: string) => !!val || 'Rating is required',
+  (val: string) => +val >= 1 || 'Rating must be at least 1',
+  (val: string) => +val <= 10 || 'Rating must be at most 10',
+];
+
+const convertFileToBase64 = (file: File) => {
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    formData.image = e.target?.result as string;
+  };
+  reader.readAsDataURL(file);
+};
+
+const fileRules = [
+  (file: File | null) => !!file || 'File is required',
+  (file: File | null) =>
+    (file && file.type.startsWith('image/')) || 'File must be an image',
+];
 </script>
 
 <style scoped lang="scss">

@@ -14,3 +14,5 @@ export interface IMovie {
   image: string;
   genre: IGenre;
 }
+
+export type TCreateMovie = Omit<IMovie, 'id'>;
