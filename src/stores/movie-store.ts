@@ -4,12 +4,16 @@ import { IMovie, TCreateMovie } from 'src/types';
 interface IState {
   movies: IMovie[];
   movie: IMovie | null;
+  filteredMovies: IMovie[];
 }
 
 export const useMovieStore = defineStore('movie-store', {
   state: (): IState => ({
     movies: JSON.parse(localStorage.getItem('movies') || '[]') as IMovie[],
     movie: null,
+    filteredMovies: JSON.parse(
+      localStorage.getItem('movies') || '[]'
+    ) as IMovie[],
   }),
   actions: {
     addnewMovie(newMovie: IMovie) {
@@ -37,6 +41,17 @@ export const useMovieStore = defineStore('movie-store', {
       if (movies) {
         this.movies = JSON.parse(movies);
       }
+    },
+    filterMovies(filterData: { [key: string]: unknown }) {
+      this.filteredMovies = this.movies.filter((movie) => {
+        return Object.keys(filterData).every((key) => {
+          const movieKey = key as keyof IMovie;
+          const filterValue = filterData[key] as string | number | undefined;
+          return filterValue
+            ? movie[movieKey]?.toString().includes(filterValue.toString())
+            : true;
+        });
+      });
     },
   },
 });
