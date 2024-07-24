@@ -1,41 +1,15 @@
-# music-app-vue (front-vue)
+<h4>
+Movie app, vue 3 / composition api / typescript / pinia as state manager
+</h4>
 
-A Quasar Project
+Steps:
 
-## Install the dependencies
-```bash
-yarn
-# or
-npm install
-```
+1. Clone git-repo: https://github.com/Chefchelious/pazzle-pro-test.git
 
-### Start the app in development mode (hot-code reloading, error reporting, etc.)
-```bash
-quasar dev
-```
+2. In root folder start command npm i
 
+3. Then npm run dev
 
-### Lint the files
-```bash
-yarn lint
-# or
-npm run lint
-```
+The website will automatically open at http://localhost:9000
 
-
-### Format the files
-```bash
-yarn format
-# or
-npm run format
-```
-
-
-
-### Build the app for production
-```bash
-quasar build
-```
-
-### Customize the configuration
-See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-config-js).
+You can also visit the deployed version on Netlify: https://pazzle-pro-movies.netlify.app/movie

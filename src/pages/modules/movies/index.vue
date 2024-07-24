@@ -1,7 +1,6 @@
 <template>
   <div class="movies-container">
-    <div class="row items-center justify-between q-mb-lg gap-md">
-      <h1 class="text-h4 text-sm-text-subtitle1">Movies list here</h1>
+    <div class="row items-center justify-end q-mb-lg gap-md">
       <q-btn color="purple-6" label="add new" @click="goToCreatePage" />
     </div>
 

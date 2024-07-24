@@ -88,11 +88,6 @@ const linksList: EssentialLinkProps[] = [
     title: 'Movies',
     link: '/movie',
   },
-  {
-    id: '3',
-    title: 'Albums',
-    link: '/album',
-  },
 ];
 
 const leftDrawerOpen = ref(false);
