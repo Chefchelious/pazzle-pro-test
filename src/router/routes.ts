@@ -11,11 +11,15 @@ const routes: RouteRecordRaw[] = [
         component: () => import('pages/modules/movies/index.vue'),
       },
       {
+        path: '/movie/:id',
+        component: () => import('pages/modules/movies/page.vue'),
+      },
+      {
         path: '/movie/create',
         component: () => import('pages/modules/movies/create-movie.vue'),
       },
       {
-        path: '/movie/edit/:id?',
+        path: '/movie/edit/:id',
         component: () => import('pages/modules/movies/edit-movie.vue'),
       },
       {

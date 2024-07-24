@@ -110,8 +110,11 @@
       </q-file>
     </div>
 
-    <div v-if="formData.image">
+    <!-- <div v-if="formData.image">
       <img :src="formData.image" alt="Movie Image" style="max-width: 100%" />
+    </div> -->
+    <div v-if="formData.image" class="movie__poster-wrapper">
+      <img className="movie__poster" :src="formData.image" alt="poster" />
     </div>
 
     <div style="max-height: 150px" class="q-pb-lg">
@@ -137,17 +140,19 @@
 </template>
 
 <script setup lang="ts">
-import { getCurrentInstance, watch } from 'vue';
+import { getCurrentInstance, onMounted, watch } from 'vue';
 import { GENRES } from 'src/mokData';
 import { IGenre } from 'src/types';
 import { reactive, ref } from 'vue';
 import { useMovieStore } from 'src/stores/movie-store';
 import { v4 as uuidv4 } from 'uuid';
+import { storeToRefs } from 'pinia';
 
 const globalProperties =
   getCurrentInstance()?.appContext.config.globalProperties;
 
 const movieStore = useMovieStore();
+const { movie } = storeToRefs(movieStore);
 
 const isDatePickerVisible = ref(false);
 const dpKey = ref(Date.now());
@@ -193,7 +198,6 @@ const findNavigationButtons = () => {
 };
 
 const create = () => {
-  console.log(movieStore.movies.length);
   movieStore.addnewMovie({
     id: uuidv4(),
     ...formData,
@@ -201,13 +205,17 @@ const create = () => {
     genre: formData.genre as IGenre,
   });
 
-  console.log(movieStore.movies.length);
-
   globalProperties?.$router.go(-1);
 };
 
-const update = () => {
-  console.log('updated');
+const update = async () => {
+  movieStore.updateMovie(movieId.value, {
+    ...formData,
+    rating: +formData.rating,
+    genre: formData.genre as IGenre,
+  });
+
+  globalProperties?.$router.push('/movie');
 };
 
 const save = async () => {
@@ -246,6 +254,36 @@ const fileRules = [
   (file: File | null) =>
     (file && file.type.startsWith('image/')) || 'File must be an image',
 ];
+
+const base64ToFile = async (base64: string, filename: string) => {
+  const response = await fetch(base64);
+  const blob = await response.blob();
+  return new File([blob], filename, { type: blob.type });
+};
+
+const getMovie = async () => {
+  movieStore.getMovie(movieId.value);
+
+  if (movie.value) {
+    (formData.title = movie.value.title),
+      (formData.year = movie.value.year),
+      (formData.rating = String(movie.value.rating)),
+      (formData.description = movie.value.description),
+      (formData.genre = movie.value.genre);
+  }
+
+  if (movie.value && movie.value.image) {
+    formData.image = movie.value.image;
+    file.value = await base64ToFile(movie.value.image, 'image.jpg');
+  }
+};
+
+onMounted(() => {
+  if (movieId.value) {
+    console.log('yes');
+    getMovie();
+  }
+});
 </script>
 
 <style scoped lang="scss">
@@ -255,5 +293,15 @@ const fileRules = [
   display: flex;
   flex-direction: column;
   gap: 12px;
+}
+
+.movie__poster-wrapper {
+  width: 50%;
+}
+
+.movie__poster {
+  width: 100%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
 }
 </style>

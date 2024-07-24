@@ -11,6 +11,7 @@
           v-for="movie in paginatedMovies"
           :key="movie.id"
           :movie="movie"
+          @click="goToMoviePage(movie.id)"
         />
       </div>
 
@@ -56,6 +57,8 @@ const pagesNumber = computed(() => {
 });
 
 const goToCreatePage = () => globalProperties?.$router.push('/movie/create');
+const goToMoviePage = (id: string) =>
+  globalProperties?.$router.push(`/movie/${id}`);
 </script>
 
 <style scoped lang="scss">
