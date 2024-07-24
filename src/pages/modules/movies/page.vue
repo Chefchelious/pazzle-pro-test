@@ -2,7 +2,14 @@
   <section class="movie">
     <div v-if="movie">
       <div class="control-pannel q-mb-lg row q-gutter-sm justify-end">
-        <q-btn label="delete" icon="delete" color="negative" no-caps no-wrap />
+        <q-btn
+          label="delete"
+          icon="delete"
+          color="negative"
+          no-caps
+          no-wrap
+          @click="isOpenConfirmModal = true"
+        />
         <q-btn
           label="edit"
           icon="edit"
@@ -40,13 +47,18 @@
       </div>
     </div>
   </section>
+  <confirm-modal
+    v-model="isOpenConfirmModal"
+    @close="isOpenConfirmModal = false"
+    @click="deleteMovie"
+  />
 </template>
 
 <script lang="ts" setup>
-import { getCurrentInstance, ref } from 'vue';
+import { getCurrentInstance, ref, onMounted } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useMovieStore } from 'src/stores/movie-store';
-import { onMounted } from 'vue';
+import ConfirmModal from 'src/components/modals/confirm-modal.vue';
 
 const globalProperties =
   getCurrentInstance()?.appContext.config.globalProperties;
@@ -56,8 +68,16 @@ const movieId = ref<string>(globalProperties?.$route.params.id as string);
 const movieStore = useMovieStore();
 const { movie } = storeToRefs(movieStore);
 
+const isOpenConfirmModal = ref(false);
+
 const goToEditPage = (id: string) => {
   globalProperties?.$router.push(`/movie/edit/${id}`);
+};
+
+const deleteMovie = () => {
+  movieStore.deleteMovie(movieId.value);
+  isOpenConfirmModal.value = false;
+  globalProperties?.$router.push('/movie');
 };
 
 onMounted(() => {

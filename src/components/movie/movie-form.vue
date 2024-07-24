@@ -110,9 +110,6 @@
       </q-file>
     </div>
 
-    <!-- <div v-if="formData.image">
-      <img :src="formData.image" alt="Movie Image" style="max-width: 100%" />
-    </div> -->
     <div v-if="formData.image" class="movie__poster-wrapper">
       <img className="movie__poster" :src="formData.image" alt="poster" />
     </div>

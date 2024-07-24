@@ -11,7 +11,12 @@
           @click="toggleLeftDrawer"
         />
 
-        <q-toolbar-title> Movies </q-toolbar-title>
+        <q-toolbar-title
+          class="cursor-pointer"
+          @click="globalProperties?.$router.push('/movie')"
+        >
+          Movies
+        </q-toolbar-title>
 
         <div class="cursor-pointer">
           <q-btn label="Hello, Dim" unelevated>

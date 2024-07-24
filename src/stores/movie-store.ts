@@ -22,6 +22,10 @@ export const useMovieStore = defineStore('movie-store', {
       );
       this.saveToLocalStorage();
     },
+    deleteMovie(id: string) {
+      this.movies = this.movies.filter((movie) => movie.id !== id);
+      this.saveToLocalStorage();
+    },
     getMovie(id: string) {
       this.movie = this.movies.find((movie) => movie.id === id) ?? null;
     },
