@@ -28,4 +28,10 @@ const emit = defineEmits(['click', 'close']);
 .modal-content {
   width: 40%;
 }
+
+@media (max-width: 830px) {
+  .modal-content {
+    width: 90%;
+  }
+}
 </style>
