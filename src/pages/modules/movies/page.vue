@@ -23,19 +23,19 @@
 
       <div class="movie__content">
         <div class="movie__poster-wrapper">
-          <img className="movie__poster" :src="movie.image" alt="poster" />
+          <img class="movie__poster" :src="movie.image" alt="poster" />
         </div>
         <div class="movie__stats">
           <p>
-            <strong className="movie__stats-heading">Year:</strong
+            <strong class="movie__stats-heading">Year:</strong
             >{{ movie.year }}
           </p>
           <p>
-            <strong className="movie__stats-heading">Rating:</strong
+            <strong class="movie__stats-heading">Rating:</strong
             >{{ movie.rating }}
           </p>
           <p>
-            <strong className="movie__stats-heading">Genre:</strong
+            <strong class="movie__stats-heading">Genre:</strong
             >{{ movie.genre.name }}
           </p>
         </div>
